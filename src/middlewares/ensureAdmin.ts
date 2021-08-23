@@ -1,18 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 
+import { AppError } from "../shared/errors/AppError";
+import { UserRepository } from "../modules/users/infra/typeorm/repositories/UserRepository";
+
 async function ensureAdmin(
   request: Request,
   response: Response,
   next: NextFunction
-): Promise<Response | void> {
-  //verificar se o usuario é admin
-  const admin = true;
+): Promise<void> {
+  //Recuperar informações do usuário
+  const { id } = request.user;
 
-  if (admin) {
-    return next();
+  try {
+    // Verificar se o usuario é admin
+    const usersRepository = new UserRepository();
+
+    const user = await usersRepository.findById(id);
+    console.log(user);
+    if (!user.admin) {
+      console.log("entrou");
+      throw new AppError("User unauthorized", 401);
+    }
+
+    next();
+  } catch (err) {
+    throw new AppError(err.message, 401);
   }
-
-  return response.status(401).json({ error: "User unauthorized" });
 }
 
 export { ensureAdmin };

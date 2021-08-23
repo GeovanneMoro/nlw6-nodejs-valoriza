@@ -4,7 +4,8 @@ import { CreateComplimentsUseCase } from "./CreateComplimentsUseCase";
 
 class CreateComplimentsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { tag_id, user_sender, user_receiver, message } = request.body;
+    const { tag_id, user_receiver, message } = request.body;
+    const { id } = request.user;
 
     const createComplimentsUseCase = container.resolve(
       CreateComplimentsUseCase
@@ -12,7 +13,7 @@ class CreateComplimentsController {
 
     const compliment = await createComplimentsUseCase.execute({
       tag_id,
-      user_sender,
+      user_sender: id,
       user_receiver,
       message,
     });

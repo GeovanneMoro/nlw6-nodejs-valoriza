@@ -1,9 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { AppError } from "../../../../shared/errors/AppError";
+
 import { IUserRepository } from "../../../users/repositories/IUserRepository";
 import { ICreateComplimentDTO } from "../../dtos/ICreateComplimentDTO";
 import { Compliment } from "../../infra/typeorm/entities/Compliment";
 import { IComplimentsRepository } from "../../repositories/IComplimentsRepository";
+
+import { AppError } from "../../../../shared/errors/AppError";
 
 @injectable()
 class CreateComplimentsUseCase {
